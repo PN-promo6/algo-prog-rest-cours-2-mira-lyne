@@ -122,6 +122,25 @@ app.use(cors(corsOption));
 
 app.listen(3000);
 
+//Passage d'une route sans parametre
 app.get('/users', function (req, res) {
     res.send(users)
-})
+});
+
+//Passage d'une route avec parametre
+app.get('/users/:id', function (req, res) {
+    let id = req.params.id; //on recupere le parametre passé en bout de route (l'id)
+
+    //on cherche un utilisateur ayant cet id
+    for (let i = 0; i < users.length; i++) {
+        let currentUser = players[i];
+        if (currentUser.id == id) { //Si on a trouvé un joueur ayant l'id demandé
+            res.send(currentUser); //On répond à la requête en retournant le joueur (et le code de status 200 envoyé par défaut)
+            break; //On quitte la fonction 
+        }
+    }
+
+    //Si on n'a pas trouvé de joueur avec l'id demandé :
+    res.statusMessage = "User not found"; //On prépare un message d'erreur
+    res.status(404).end(); //On répond avec une erreur 404 et le message d'erreur
+});
